@@ -2,8 +2,8 @@
 
 namespace AnimalShelter;
 
-use AnimalShelter\interfaces\ShelterInteractionInterface;
-use AnimalShelter\models\Animal;
+use AnimalShelter\Interfaces\ShelterInteractionInterface;
+use AnimalShelter\Entity\Animal;
 use Doctrine\ORM\EntityManager;
 
 class ShelterManager implements ShelterInteractionInterface
@@ -31,7 +31,7 @@ class ShelterManager implements ShelterInteractionInterface
 
     public function transmit(Animal $animal): bool
     {
-        if (!$animal->getId()) return false;//Not at the shelter
+        if (!$animal->getId() || $animal->getStatus() !== Animal::STATUS_ADOPTED) return false;//Not at the shelter
 
         $animal->setStatus(Animal::STATUS_TRANSMITTED);
         $animal->setTransmittedAt(new \DateTime());
@@ -41,16 +41,5 @@ class ShelterManager implements ShelterInteractionInterface
         $this->entityManager->clear();
 
         return true;
-    }
-
-    public function getAnimalsByType(string $type): array
-    {
-        if (!Animal::isValidType($type)) return [];
-
-        $animals = $this->entityManager
-            ->getRepository(Animal::class)
-            ->findBy(['type' => $type], ['name' => 'asc']);
-
-        return $animals;
     }
 }

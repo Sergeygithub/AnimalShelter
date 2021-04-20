@@ -1,8 +1,8 @@
 <?php
 
-namespace AnimalShelter\interfaces;
+namespace AnimalShelter\Interfaces;
 
-use AnimalShelter\models\Animal;
+use AnimalShelter\Entity\Animal;
 
 interface ShelterInteractionInterface
 {

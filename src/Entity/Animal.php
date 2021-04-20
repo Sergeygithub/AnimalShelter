@@ -1,6 +1,6 @@
 <?php
 
-namespace AnimalShelter\models;
+namespace AnimalShelter\Entity;
 
 class Animal
 {
@@ -70,6 +70,9 @@ class Animal
      */
     public function setType(string $type): void
     {
+        if (!in_array($type, $this->getAnimalTypes())) {
+            throw new \InvalidArgumentException('Invalid type');
+        }
         $this->type = $type;
     }
 
@@ -118,6 +121,9 @@ class Animal
      */
     public function setStatus(string $status): void
     {
+        if (!in_array($status, $this->getAnimalStatuses())) {
+            throw new \InvalidArgumentException('Invalid status');
+        }
         $this->status = $status;
     }
 
@@ -153,7 +159,7 @@ class Animal
         $this->transmittedAt = $transmittedAt;
     }
 
-    public static function getAnimalTypes(): array
+    public function getAnimalTypes(): array
     {
         return [
             self::ANIMAL_TYPE_CAT,
@@ -162,8 +168,11 @@ class Animal
         ];
     }
 
-    public static function isValidType(string $type): bool
+    public function getAnimalStatuses(): array
     {
-        return in_array($type, self::getAnimalTypes());
+        return [
+            self::STATUS_ADOPTED,
+            self::STATUS_TRANSMITTED,
+        ];
     }
 }
